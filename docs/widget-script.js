@@ -57,30 +57,48 @@ class DiscussionWidget {
         try {
             if (this.config.mockData) {
                 // Load mock data for testing
+                console.log('Widget configured to use mock data');
                 this.comments = this.generateMockComments();
             } else if (this.config.replitApiUrl) {
                 // Load from Replit proxy API (preferred method)
+                console.log('Attempting to fetch from Replit API:', this.config.replitApiUrl);
+                console.log('Course ID:', this.config.courseId, 'Discussion ID:', this.config.discussionId);
                 try {
                     this.comments = await this.fetchFromReplitAPI();
+                    console.log('Successfully loaded', this.comments.length, 'comments from Replit API');
+                    if (this.comments.length === 0) {
+                        console.warn('API returned 0 comments. Check if the discussion has any posts.');
+                    }
                 } catch (apiError) {
-                    console.warn('Replit API unavailable, falling back to mock data:', apiError);
+                    console.error('❌ Replit API Error:', apiError.message);
+                    console.error('Failed to fetch from:', this.config.replitApiUrl);
+                    console.error('Troubleshooting steps:');
+                    console.error('  1. Verify the Replit backend URL is correct and accessible');
+                    console.error('  2. Check that the backend server is running');
+                    console.error('  3. Ensure CORS is enabled on the backend');
+                    console.error('  4. Test the URL directly in your browser');
                     this.comments = this.generateMockComments();
-                    this.showInfo('Using demo data (backend unavailable)');
+                    this.showInfo('⚠️ Backend unavailable - showing demo data. Check console for details.');
                 }
             } else {
                 // Fallback: Load directly from Canvas API
+                console.log('Attempting to fetch directly from Canvas API');
                 this.comments = await this.fetchCanvasComments();
+                console.log('Successfully loaded', this.comments.length, 'comments from Canvas API');
             }
             
             this.elements.totalComments.textContent = this.comments.length;
             
         } catch (error) {
-            console.error('Error loading comments:', error);
+            console.error('❌ Error loading comments:', error);
+            console.error('All data sources failed. Troubleshooting:');
+            console.error('  - If using Replit API: verify the backend is running and accessible');
+            console.error('  - If using Canvas API: check your Canvas URL, access token, and IDs');
+            console.error('  - For testing: set mockData: true in configuration');
             // Final fallback to mock data
-            console.warn('All data sources failed, using mock data');
             this.comments = this.generateMockComments();
             this.elements.totalComments.textContent = this.comments.length;
-            this.showInfo('Using demo data (configuration needed)');
+            this.showInfo('⚠️ Configuration error - showing demo data. Check console for details.');
         }
     }
 
@@ -133,6 +151,8 @@ class DiscussionWidget {
             url.searchParams.append('courseId', courseId);
             url.searchParams.append('discussionId', discussionId);
 
+            console.log('Fetching from URL:', url.toString());
+
             const response = await fetch(url.toString(), {
                 method: 'GET',
                 headers: {
@@ -141,10 +161,12 @@ class DiscussionWidget {
             });
 
             if (!response.ok) {
-                throw new Error(`Replit API error: ${response.status}`);
+                const errorText = await response.text().catch(() => 'Unable to read error response');
+                throw new Error(`Replit API returned ${response.status}: ${errorText}`);
             }
 
             const data = await response.json();
+            console.log('API response received:', data);
             
             // Handle different response formats from Replit API
             let comments = [];
@@ -155,8 +177,10 @@ class DiscussionWidget {
                 comments = data.comments;
             } else if (data.data && Array.isArray(data.data)) {
                 comments = data.data;
+            } else if (data.error) {
+                throw new Error(`Backend error: ${data.error}`);
             } else {
-                throw new Error('Unexpected API response format');
+                throw new Error('Unexpected API response format. Expected an array or object with comments/data property.');
             }
 
             // Normalize comment format
@@ -173,8 +197,13 @@ class DiscussionWidget {
             // Limit number of comments
             return normalizedComments.slice(0, maxComments);
         } catch (error) {
-            console.error('Error fetching from Replit API:', error);
-            throw new Error(`Failed to fetch from Replit API: ${error.message}`);
+            // Provide more specific error messages
+            if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+                throw new Error('Network error: Cannot reach backend server. The URL may be incorrect or the server may be down.');
+            } else if (error.message.includes('Invalid URL')) {
+                throw new Error('Invalid Replit API URL format. Please check the configuration.');
+            }
+            throw error;
         }
     }
 
@@ -362,16 +391,19 @@ class DiscussionWidget {
         // Display an informational banner without blocking the widget
         const infoBanner = document.createElement('div');
         infoBanner.className = 'info-banner';
-        infoBanner.style.cssText = 'color: #004085; background: #cce5ff; border: 1px solid #b8daff; padding: 10px 15px; border-radius: 4px; margin-bottom: 10px; font-size: 14px;';
-        infoBanner.innerHTML = `<strong>ℹ️ Info:</strong> ${message}`;
+        infoBanner.style.cssText = 'color: #856404; background: #fff3cd; border: 2px solid #ffc107; padding: 12px 15px; border-radius: 6px; margin-bottom: 15px; font-size: 14px; font-weight: 500; box-shadow: 0 2px 4px rgba(0,0,0,0.1);';
+        infoBanner.innerHTML = `${message}`;
         
-        // Insert at the top of the comment display
-        const commentDisplay = this.elements.commentContent.parentElement;
-        const existingBanner = commentDisplay.querySelector('.info-banner');
+        // Insert at the top of the widget container
+        const widgetContainer = document.querySelector('.widget-container');
+        const existingBanner = widgetContainer.querySelector('.info-banner');
         if (existingBanner) {
             existingBanner.remove();
         }
-        commentDisplay.insertBefore(infoBanner, commentDisplay.firstChild);
+        widgetContainer.insertBefore(infoBanner, widgetContainer.firstChild);
+        
+        // Log to console as well
+        console.warn(message);
     }
 }
 
