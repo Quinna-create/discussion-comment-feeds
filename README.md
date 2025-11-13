@@ -37,6 +37,42 @@ A customizable widget for Canvas LMS that displays cycling student discussion co
    - Copy `config-example.html` and edit with your settings
    - Or add configuration directly to your HTML (see below)
 
+## GitHub Pages Deployment
+
+This repository is configured for GitHub Pages deployment, making it easy to host the widget and embed it in Canvas.
+
+### Enable GitHub Pages
+
+1. Go to your repository on GitHub
+2. Navigate to **Settings** → **Pages**
+3. Under "Build and deployment":
+   - Source: **Deploy from a branch**
+   - Branch: Select **main** and **/docs** folder
+   - Click **Save**
+4. GitHub will provide a URL like: `https://your-username.github.io/discussion-comment-feeds/`
+
+### Access Your Widget
+
+Once deployed, your widget will be available at:
+```
+https://your-username.github.io/discussion-comment-feeds/discussion-widget.html
+```
+
+### Embed in Canvas Using GitHub Pages
+
+After deploying to GitHub Pages, embed the widget in Canvas using an iframe:
+
+```html
+<iframe src="https://your-username.github.io/discussion-comment-feeds/discussion-widget.html" 
+        width="100%" 
+        height="600px" 
+        frameborder="0"
+        style="border: none;">
+</iframe>
+```
+
+**Note:** Replace `your-username` with your actual GitHub username.
+
 ## Installation in Canvas
 
 ### Method 1: Embed in Canvas Page
