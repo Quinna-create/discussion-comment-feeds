@@ -52,15 +52,26 @@ app.get('/health', (req, res) => {
 // Main endpoint to fetch discussion comments
 app.get('/', async (req, res) => {
   try {
+    // Get courseId and discussionId from query parameters (sent by widget)
+    // Fall back to environment variables if not provided
+    const courseId = req.query.courseId || COURSE_ID;
+    const discussionId = req.query.discussionId || DISCUSSION_ID;
+    
     // Validate configuration
-    if (!CANVAS_URL || !ACCESS_TOKEN || !COURSE_ID || !DISCUSSION_ID) {
+    if (!CANVAS_URL || !ACCESS_TOKEN) {
       return res.status(500).json({ 
         error: 'Server configuration incomplete. Check environment variables.' 
       });
     }
+    
+    if (!courseId || !discussionId) {
+      return res.status(400).json({ 
+        error: 'courseId and discussionId are required as query parameters or environment variables.' 
+      });
+    }
 
     // Fetch from Canvas API
-    const apiUrl = `${CANVAS_URL}/api/v1/courses/${COURSE_ID}/discussion_topics/${DISCUSSION_ID}/entries`;
+    const apiUrl = `${CANVAS_URL}/api/v1/courses/${courseId}/discussion_topics/${discussionId}/entries`;
     
     const response = await fetch(apiUrl, {
       headers: {
@@ -147,6 +158,8 @@ In your widget HTML, update the configuration:
 ```javascript
 window.discussionWidgetConfig = {
     replitApiUrl: 'https://your-repl-url.username.repl.co',
+    courseId: 'YOUR_COURSE_ID',      // Required: Canvas course ID
+    discussionId: 'YOUR_DISCUSSION_ID', // Required: Discussion topic ID
     cycleInterval: 15000,
     maxComments: 50
 };
