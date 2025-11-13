@@ -8,18 +8,42 @@ A customizable widget for Canvas LMS that displays cycling student discussion co
 - ⏯️ **Playback controls** - Pause, play, and navigate through comments manually
 - ⚙️ **Configurable timing** - Adjust cycle interval (5-60 seconds)
 - 🎨 **Clean, modern UI** - Responsive design that integrates seamlessly with Canvas
-- 🔒 **Secure** - Uses Canvas API with token authentication
+- 🔒 **Secure** - Connects to Canvas via Replit backend proxy (no exposed API tokens)
 - 📱 **Responsive** - Works on desktop, tablet, and mobile devices
+
+## Architecture
+
+This widget uses a **secure proxy architecture**:
+1. **Replit Backend** - Handles Canvas API authentication securely on the server
+2. **Widget Frontend** - Fetches comments from Replit API (no Canvas tokens exposed in browser)
+3. **Canvas LMS** - Source of discussion comments
+
+This is more secure than embedding Canvas API tokens directly in the frontend code.
 
 ## Quick Start
 
-### Option 1: Mock Data (Testing)
+### Option 1: Use with Replit Backend (Recommended)
 
-1. Open `demo.html` in a web browser
-2. The widget will load with sample comments automatically
-3. Perfect for testing the UI and functionality
+1. Open `index.html` or `demo.html` in a web browser
+2. The widget fetches comments from the Replit backend server
+3. The Replit server connects to Canvas and returns formatted comments
+4. **No Canvas API token needed in the frontend!**
 
-### Option 2: Canvas Integration
+### Option 2: Mock Data (Offline Testing)
+
+1. Edit the configuration in your HTML file:
+```javascript
+window.discussionWidgetConfig = {
+    mockData: true,
+    cycleInterval: 10000
+};
+```
+
+2. Open the file in a web browser to see sample comments
+
+### Option 3: Direct Canvas API Access (Less Secure)
+
+Only use this if you can't use the Replit backend:
 
 1. **Get Canvas API Token**
    - Log into your Canvas account
@@ -122,13 +146,14 @@ For more advanced integration, you can create a Canvas LTI (Learning Tools Inter
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `canvasUrl` | string | '' | Your Canvas instance URL (e.g., 'https://canvas.instructure.com') |
-| `accessToken` | string | '' | Canvas API access token |
-| `courseId` | string | '' | Canvas course ID |
-| `discussionId` | string | '' | Discussion topic ID |
+| `replitApiUrl` | string | '' | **Recommended**: Replit backend API URL (secure proxy to Canvas) |
+| `canvasUrl` | string | '' | Your Canvas instance URL (e.g., 'https://canvas.instructure.com') - for direct access |
+| `accessToken` | string | '' | Canvas API access token - for direct access (not recommended) |
+| `courseId` | string | '' | Canvas course ID - for direct access |
+| `discussionId` | string | '' | Discussion topic ID - for direct access |
 | `cycleInterval` | number | 15000 | Time between comments in milliseconds |
 | `maxComments` | number | 50 | Maximum number of comments to load |
-| `mockData` | boolean | false | Use mock data instead of Canvas API (for testing) |
+| `mockData` | boolean | false | Use mock data instead of API (for offline testing) |
 
 ## File Structure
 
@@ -148,7 +173,34 @@ discussion-comment-feeds/
 
 ## Usage Examples
 
-### Basic Setup with Mock Data
+### Recommended: Replit Backend Integration (Secure)
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Discussion Widget</title>
+    <link rel="stylesheet" href="widget-style.css">
+</head>
+<body>
+    <div id="discussion-widget" class="widget-container">
+        <!-- Widget content from discussion-widget.html -->
+    </div>
+    
+    <script>
+    // Fetch comments from Replit backend (secure - no exposed tokens)
+    window.discussionWidgetConfig = {
+        replitApiUrl: 'https://c76efa4a-f1cb-493a-bbce-a2170f4456b4-00-2qw4tixq4jmr9.kirk.replit.dev',
+        cycleInterval: 15000, // 15 seconds
+        maxComments: 50
+    };
+    </script>
+    <script src="widget-script.js"></script>
+</body>
+</html>
+```
+
+### Mock Data (Offline Testing)
 
 ```html
 <!DOCTYPE html>
@@ -174,7 +226,7 @@ discussion-comment-feeds/
 </html>
 ```
 
-### Canvas API Integration
+### Direct Canvas API Integration (Not Recommended - Exposes Token)
 
 ```javascript
 window.discussionWidgetConfig = {
@@ -187,14 +239,124 @@ window.discussionWidgetConfig = {
 };
 ```
 
+## Setting Up the Replit Backend
+
+The Replit backend acts as a secure proxy between the widget and Canvas LMS. Here's how to set it up:
+
+### Backend Requirements
+
+Your Replit server should:
+1. Fetch comments from Canvas API using your Canvas credentials
+2. Return comments in a JSON format the widget can understand
+3. Enable CORS to allow the widget to fetch data
+
+### Expected API Response Format
+
+The widget expects the Replit API to return comments in one of these formats:
+
+**Format 1: Simple Array**
+```json
+[
+  {
+    "text": "This is a comment",
+    "author": "Student Name",
+    "timestamp": "2024-01-15T10:30:00Z"
+  }
+]
+```
+
+**Format 2: Nested Object**
+```json
+{
+  "comments": [
+    {
+      "message": "This is a comment",
+      "user_name": "Student Name",
+      "created_at": "2024-01-15T10:30:00Z"
+    }
+  ]
+}
+```
+
+The widget will automatically normalize these formats.
+
+### Sample Replit Backend (Node.js/Express)
+
+```javascript
+const express = require('express');
+const cors = require('cors');
+const fetch = require('node-fetch');
+
+const app = express();
+app.use(cors()); // Enable CORS
+
+const CANVAS_URL = process.env.CANVAS_URL;
+const ACCESS_TOKEN = process.env.ACCESS_TOKEN;
+const COURSE_ID = process.env.COURSE_ID;
+const DISCUSSION_ID = process.env.DISCUSSION_ID;
+
+app.get('/', async (req, res) => {
+  try {
+    const apiUrl = `${CANVAS_URL}/api/v1/courses/${COURSE_ID}/discussion_topics/${DISCUSSION_ID}/entries`;
+    
+    const response = await fetch(apiUrl, {
+      headers: {
+        'Authorization': `Bearer ${ACCESS_TOKEN}`
+      }
+    });
+    
+    const data = await response.json();
+    
+    // Transform Canvas data to simple format
+    const comments = data.map(entry => ({
+      text: entry.message,
+      author: entry.user_name || 'Anonymous',
+      timestamp: entry.created_at
+    }));
+    
+    res.json(comments);
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Failed to fetch comments' });
+  }
+});
+
+app.listen(3000, () => console.log('Server running on port 3000'));
+```
+
+### Update Your Configuration
+
+Once your Replit backend is running, update the widget configuration:
+
+```javascript
+window.discussionWidgetConfig = {
+    replitApiUrl: 'YOUR_REPLIT_URL_HERE',  // e.g., 'https://your-project.username.repl.co'
+    cycleInterval: 15000,
+    maxComments: 50
+};
+```
+
 ## Security Considerations
 
-⚠️ **Important**: Never commit your Canvas access token to version control!
+⚠️ **Important**: The Replit backend architecture is recommended for security!
 
-- Store tokens in environment variables or secure configuration
+**Benefits of Using Replit Backend:**
+- Canvas API tokens stay on the server (never exposed in browser)
+- You can implement rate limiting and caching
+- Better control over data transformation
+- Can add authentication if needed
+
+**Direct Canvas API (Not Recommended):**
+- Exposes your Canvas token in the frontend JavaScript
+- Anyone viewing page source can steal your token
+- Use only for testing or single-user scenarios
+
+**Best Practices:**
+- Store tokens in environment variables on Replit
 - Use read-only tokens with minimal permissions
 - Rotate tokens regularly
-- Consider using server-side proxy for API calls in production
+- Implement caching to reduce API calls
+- Add rate limiting to prevent abuse
 
 ## Browser Support
 
@@ -205,7 +367,26 @@ window.discussionWidgetConfig = {
 
 ## Troubleshooting
 
-### Comments Not Loading
+### Comments Not Loading from Replit Backend
+
+1. **Check if Replit server is running**
+   - Open the Replit URL in a browser
+   - You should see JSON data or a response
+
+2. **Verify CORS is enabled**
+   - The Replit server must allow cross-origin requests
+   - Add `app.use(cors())` in Express or equivalent
+
+3. **Check API response format**
+   - Open browser DevTools → Network tab
+   - Look for the API request and check the response
+   - Ensure it matches expected format (see "Expected API Response Format" above)
+
+4. **Test with mock data**
+   - Set `mockData: true` in config to verify the widget works
+   - If mock data works, the issue is with the API connection
+
+### Comments Not Loading from Direct Canvas API
 
 1. Check browser console for errors
 2. Verify Canvas URL, course ID, and discussion ID are correct
