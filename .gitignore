@@ -39,3 +39,7 @@ config.html
 
 # OS files
 Thumbs.db
+
+# Test files (for development/verification only)
+test-integration.html
+test-url-direct.html
