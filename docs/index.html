@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discussion Comment Feeds Widget</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            padding: 40px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 32px;
+        }
+
+        p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 10px;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .button.secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .button.secondary:hover {
+            background: #f8f9ff;
+        }
+
+        .links {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid #eee;
+        }
+
+        .links h2 {
+            color: #333;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .links a {
+            display: block;
+            color: #667eea;
+            text-decoration: none;
+            margin: 8px 0;
+            font-size: 14px;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        .features {
+            text-align: left;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9ff;
+            border-radius: 8px;
+        }
+
+        .features ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .features li {
+            padding: 8px 0;
+            color: #555;
+        }
+
+        .features li:before {
+            content: "✓ ";
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📝 Discussion Comment Feeds Widget</h1>
+        <p>A customizable widget for Canvas LMS that displays cycling student discussion comments alongside video lectures.</p>
+        
+        <div class="features">
+            <ul>
+                <li>Auto-cycling comments from Canvas discussions</li>
+                <li>Playback controls (pause, play, navigate)</li>
+                <li>Configurable timing and display options</li>
+                <li>Secure Canvas API integration</li>
+                <li>Responsive design for all devices</li>
+            </ul>
+        </div>
+
+        <div>
+            <a href="discussion-widget.html" class="button">View Widget Demo</a>
+            <a href="../README.md" class="button secondary">Documentation</a>
+        </div>
+
+        <div class="links">
+            <h2>Resources</h2>
+            <a href="api-reference.md">API Reference</a>
+            <a href="canvas-setup.md">Canvas Setup Guide</a>
+            <a href="https://github.com/Quinna-create/discussion-comment-feeds">GitHub Repository</a>
+        </div>
+
+        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; color: #999; font-size: 14px;">
+            <p>To embed in Canvas, use this iframe code:</p>
+            <code style="background: #f5f5f5; padding: 10px; display: block; margin-top: 10px; border-radius: 4px; font-size: 12px; text-align: left; overflow-x: auto;">
+                &lt;iframe src="YOUR_PAGES_URL/discussion-widget.html"<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;width="100%"<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;height="600px"<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;frameborder="0"&gt;&lt;/iframe&gt;
+            </code>
+        </div>
+    </div>
+</body>
+</html>
