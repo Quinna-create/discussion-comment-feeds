@@ -6,7 +6,7 @@ All widgets are configured to fetch from Replit backend:
 
 ```javascript
 window.discussionWidgetConfig = {
-    replitApiUrl: 'https://c76efa4a-f1cb-493a-bbce-a2170f4456b4-00-2qw4tixq4jmr9.kirk.replit.dev',
+    replitApiUrl: 'https://canvas-discuss-quinna2.replit.app',
     cycleInterval: 15000,  // 15 seconds
     maxComments: 50
 };

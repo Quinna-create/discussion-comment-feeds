@@ -4,7 +4,7 @@
 The widget displays correctly on GitHub Pages and in Canvas embeds, but it's showing backup demo data instead of actual discussion posts from Canvas.
 
 ## Root Cause
-The Replit backend server at `https://c76efa4a-f1cb-493a-bbce-a2170f4456b4-00-2qw4tixq4jmr9.kirk.replit.dev` is not responding or is unavailable. When the widget cannot reach the backend, it automatically falls back to demo data so the widget continues to function.
+The Replit backend server at `https://canvas-discuss-quinna2.replit.app` is not responding or is unavailable. When the widget cannot reach the backend, it automatically falls back to demo data so the widget continues to function.
 
 ## How to Check If Backend Is Running
 
@@ -12,7 +12,7 @@ The Replit backend server at `https://c76efa4a-f1cb-493a-bbce-a2170f4456b4-00-2q
 
 Open this URL in your browser:
 ```
-https://c76efa4a-f1cb-493a-bbce-a2170f4456b4-00-2qw4tixq4jmr9.kirk.replit.dev?courseId=196700&discussionId=6735506
+https://canvas-discuss-quinna2.replit.app?courseId=196700&discussionId=6735506
 ```
 
 **What you should see:**
@@ -26,7 +26,7 @@ Open the widget page and press F12 to open Developer Tools. Look at the Console 
 **If backend is down, you'll see:**
 ```
 ❌ Replit API Error: Network error: Cannot reach backend server
-Failed to fetch from: https://c76efa4a-f1cb-493a-bbce-a2170f4456b4-00-2qw4tixq4jmr9.kirk.replit.dev
+Failed to fetch from: https://canvas-discuss-quinna2.replit.app
 ⚠️ Backend unavailable - showing demo data. Check console for details.
 ```
 
@@ -112,7 +112,7 @@ After fixing the backend:
 ## Current Configuration
 
 Your widgets are configured with:
-- **Backend URL**: `https://c76efa4a-f1cb-493a-bbce-a2170f4456b4-00-2qw4tixq4jmr9.kirk.replit.dev`
+- **Backend URL**: `https://canvas-discuss-quinna2.replit.app`
 - **Course ID**: `196700`
 - **Discussion ID**: `6735506`
 
@@ -125,7 +125,7 @@ Make sure your Replit backend is:
 
 Run this in your terminal to test the backend:
 ```bash
-curl "https://c76efa4a-f1cb-493a-bbce-a2170f4456b4-00-2qw4tixq4jmr9.kirk.replit.dev?courseId=196700&discussionId=6735506"
+curl "https://canvas-discuss-quinna2.replit.app?courseId=196700&discussionId=6735506"
 ```
 
 Expected output: JSON array with comment data
