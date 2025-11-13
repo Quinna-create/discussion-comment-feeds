@@ -78,7 +78,13 @@ class DiscussionWidget {
                 this.comments = this.generateMockComments();
             } else if (this.config.replitApiUrl) {
                 // Load from Replit proxy API (preferred method)
-                this.comments = await this.fetchFromReplitAPI();
+                try {
+                    this.comments = await this.fetchFromReplitAPI();
+                } catch (apiError) {
+                    console.warn('Replit API unavailable, falling back to mock data:', apiError);
+                    this.comments = this.generateMockComments();
+                    this.showInfo('Using demo data (backend unavailable)');
+                }
             } else {
                 // Fallback: Load directly from Canvas API
                 this.comments = await this.fetchCanvasComments();
@@ -88,7 +94,11 @@ class DiscussionWidget {
             
         } catch (error) {
             console.error('Error loading comments:', error);
-            this.showError('Failed to load comments. Please check your configuration.');
+            // Final fallback to mock data
+            console.warn('All data sources failed, using mock data');
+            this.comments = this.generateMockComments();
+            this.elements.totalComments.textContent = this.comments.length;
+            this.showInfo('Using demo data (configuration needed)');
         }
     }
 
@@ -351,6 +361,22 @@ class DiscussionWidget {
                 </small>
             </div>
         `;
+    }
+
+    showInfo(message) {
+        // Display an informational banner without blocking the widget
+        const infoBanner = document.createElement('div');
+        infoBanner.className = 'info-banner';
+        infoBanner.style.cssText = 'color: #004085; background: #cce5ff; border: 1px solid #b8daff; padding: 10px 15px; border-radius: 4px; margin-bottom: 10px; font-size: 14px;';
+        infoBanner.innerHTML = `<strong>ℹ️ Info:</strong> ${message}`;
+        
+        // Insert at the top of the comment display
+        const commentDisplay = this.elements.commentContent.parentElement;
+        const existingBanner = commentDisplay.querySelector('.info-banner');
+        if (existingBanner) {
+            existingBanner.remove();
+        }
+        commentDisplay.insertBefore(infoBanner, commentDisplay.firstChild);
     }
 }
 
