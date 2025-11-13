@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discussion Widget Demo</title>
+    <link rel="stylesheet" href="widget-style.css">
+</head>
+<body>
+    <div style="max-width: 800px; margin: 0 auto; padding: 20px;">
+        <h1 style="text-align: center; color: #333; margin-bottom: 10px;">Discussion Comment Feed Widget</h1>
+        <p style="text-align: center; color: #666; margin-bottom: 30px;">
+            Demo with sample student comments - Configure with your Canvas discussion board for live data
+        </p>
+
+        <!-- Widget Container -->
+        <div id="discussion-widget" class="widget-container">
+            <div class="widget-header">
+                <h3>Student Discussion Comments</h3>
+                <div class="widget-controls">
+                    <button id="pauseBtn" class="control-btn" title="Pause/Resume">
+                        <span id="pauseIcon">⏸</span>
+                    </button>
+                    <button id="prevBtn" class="control-btn" title="Previous Comment">⏮</button>
+                    <button id="nextBtn" class="control-btn" title="Next Comment">⏭</button>
+                </div>
+            </div>
+            
+            <div class="comment-display">
+                <div id="commentContent" class="comment-content">
+                    <div class="loading">Loading comments...</div>
+                </div>
+                <div class="comment-meta">
+                    <span id="authorName" class="author-name"></span>
+                    <span id="commentDate" class="comment-date"></span>
+                </div>
+                <div class="progress-indicator">
+                    <span id="currentIndex">0</span> / <span id="totalComments">0</span>
+                </div>
+            </div>
+            
+            <div class="widget-footer">
+                <label for="cycleInterval">Cycle Interval (seconds):</label>
+                <input type="number" id="cycleInterval" min="5" max="60" value="10">
+            </div>
+        </div>
+
+        <div style="margin-top: 30px; padding: 20px; background: #f9f9f9; border-radius: 8px;">
+            <h2 style="font-size: 18px; margin-bottom: 15px; color: #333;">Getting Started</h2>
+            <ol style="color: #666; line-height: 1.8;">
+                <li>This demo uses sample comments to show the widget functionality</li>
+                <li>Click the controls to pause/resume or navigate between comments</li>
+                <li>Adjust the cycle interval to control how fast comments change</li>
+                <li>To use with your Canvas course:
+                    <ul style="margin-top: 8px;">
+                        <li>Get your Canvas API token from Account Settings</li>
+                        <li>Find your Course ID and Discussion ID from Canvas URLs</li>
+                        <li>Configure the widget with your credentials (see README.md)</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Configuration Script -->
+    <script>
+    // Demo configuration with mock data
+    window.discussionWidgetConfig = {
+        mockData: true,        // Use sample data for demo
+        cycleInterval: 10000   // 10 seconds between comments
+    };
+    
+    // To use with real Canvas data, replace above with:
+    /*
+    window.discussionWidgetConfig = {
+        canvasUrl: 'https://your-institution.instructure.com',
+        accessToken: 'YOUR_ACCESS_TOKEN',
+        courseId: 'YOUR_COURSE_ID',
+        discussionId: 'YOUR_DISCUSSION_ID',
+        cycleInterval: 15000,
+        maxComments: 50
+    };
+    */
+    </script>
+    
+    <script src="widget-script.js"></script>
+</body>
+</html>
