@@ -344,7 +344,11 @@
         // Display error message
         function displayError(message) {
             const container = document.getElementById('commentsDisplay');
-            container.innerHTML = `<p style="color: #dc3545;">Error: ${message}</p>`;
+            const errorP = document.createElement('p');
+            errorP.style.color = '#dc3545';
+            errorP.textContent = `Error: ${message}`;
+            container.innerHTML = '';
+            container.appendChild(errorP);
         }
 
         // Format timestamp
