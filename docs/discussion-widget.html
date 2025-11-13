@@ -8,18 +8,7 @@
 </head>
 <body>
     <div id="discussion-widget" class="widget-container">
-        <div class="widget-header">
-            <h3>Student Discussion Comments</h3>
-            <div class="widget-controls">
-                <button id="pauseBtn" class="control-btn" title="Pause/Resume">
-                    <span id="pauseIcon">⏸</span>
-                </button>
-                <button id="prevBtn" class="control-btn" title="Previous Comment">⏮</button>
-                <button id="nextBtn" class="control-btn" title="Next Comment">⏭</button>
-            </div>
-        </div>
-        
-        <div class="comment-display">
+        <div class="comment-bubble">
             <div id="commentContent" class="comment-content">
                 <div class="loading">Loading comments...</div>
             </div>
@@ -27,15 +16,14 @@
                 <span id="authorName" class="author-name"></span>
                 <span id="commentDate" class="comment-date"></span>
             </div>
-            <div class="progress-indicator">
-                <span id="currentIndex">0</span> / <span id="totalComments">0</span>
-            </div>
         </div>
-        
-        <div class="widget-footer">
-            <label for="cycleInterval">Cycle Interval (seconds):</label>
-            <input type="number" id="cycleInterval" min="5" max="60" value="15">
-        </div>
+        <!-- Hidden elements for compatibility -->
+        <span id="currentIndex" style="display:none;">0</span>
+        <span id="totalComments" style="display:none;">0</span>
+        <button id="pauseBtn" style="display:none;"></button>
+        <button id="prevBtn" style="display:none;"></button>
+        <button id="nextBtn" style="display:none;"></button>
+        <input type="number" id="cycleInterval" style="display:none;" value="15">
     </div>
 
     <script>

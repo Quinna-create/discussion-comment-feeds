@@ -31,7 +31,6 @@ class DiscussionWidget {
             currentIndex: document.getElementById('currentIndex'),
             totalComments: document.getElementById('totalComments'),
             pauseBtn: document.getElementById('pauseBtn'),
-            pauseIcon: document.getElementById('pauseIcon'),
             prevBtn: document.getElementById('prevBtn'),
             nextBtn: document.getElementById('nextBtn'),
             cycleInterval: document.getElementById('cycleInterval')
@@ -41,7 +40,7 @@ class DiscussionWidget {
     }
 
     async init() {
-        this.setupEventListeners();
+        // No longer need to setup event listeners for buttons
         await this.loadComments();
         if (this.comments.length > 0) {
             this.displayComment(0);
@@ -50,25 +49,8 @@ class DiscussionWidget {
     }
 
     setupEventListeners() {
-        // Pause/Resume button
-        this.elements.pauseBtn.addEventListener('click', () => {
-            this.togglePause();
-        });
-
-        // Previous button
-        this.elements.prevBtn.addEventListener('click', () => {
-            this.showPrevious();
-        });
-
-        // Next button
-        this.elements.nextBtn.addEventListener('click', () => {
-            this.showNext();
-        });
-
-        // Cycle interval change
-        this.elements.cycleInterval.addEventListener('change', (e) => {
-            this.updateCycleInterval(parseInt(e.target.value) * 1000);
-        });
+        // Removed button event listeners since we no longer have visible controls
+        // The widget now auto-cycles without user intervention
     }
 
     async loadComments() {
@@ -276,6 +258,9 @@ class DiscussionWidget {
         // Strip HTML tags for security and clean display
         const cleanMessage = this.stripHtml(comment.message);
         
+        // Get the bubble element for animation
+        const bubble = document.querySelector('.comment-bubble');
+        
         // Update DOM with fade effect
         this.elements.commentContent.style.opacity = '0';
         
@@ -285,6 +270,14 @@ class DiscussionWidget {
             this.elements.commentDate.textContent = this.formatDate(comment.created_at);
             this.elements.currentIndex.textContent = index + 1;
             this.elements.commentContent.style.opacity = '1';
+            
+            // Add pulsing animation to bubble
+            if (bubble) {
+                bubble.classList.remove('pulse-animation');
+                // Trigger reflow to restart animation
+                void bubble.offsetWidth;
+                bubble.classList.add('pulse-animation');
+            }
         }, 200);
     }
 
@@ -326,8 +319,8 @@ class DiscussionWidget {
     }
 
     togglePause() {
+        // Method kept for backward compatibility but no longer used
         this.isPaused = !this.isPaused;
-        this.elements.pauseIcon.textContent = this.isPaused ? '▶' : '⏸';
     }
 
     showNext() {
@@ -336,11 +329,13 @@ class DiscussionWidget {
     }
 
     showPrevious() {
+        // Method kept for backward compatibility but no longer used
         const prevIndex = (this.currentIndex - 1 + this.comments.length) % this.comments.length;
         this.displayComment(prevIndex);
     }
 
     updateCycleInterval(milliseconds) {
+        // Method kept for backward compatibility but no longer used
         this.config.cycleInterval = milliseconds;
         if (!this.isPaused) {
             this.startCycling();

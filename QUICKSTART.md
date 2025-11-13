@@ -11,8 +11,8 @@ This is a 5-minute guide to get the Discussion Comment Feed Widget working in yo
 
 1. Download or clone this repository
 2. Open `demo.html` in your web browser
-3. You'll see sample student comments cycling automatically
-4. Test the controls (pause, next, previous)
+3. You'll see sample student comments cycling automatically in a clean bubble design
+4. Watch as comments transition smoothly with pulsing border animations
 
 This shows you exactly what students will see!
 
@@ -54,17 +54,7 @@ window.discussionWidgetConfig = {
 </script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Quinna-create/discussion-comment-feeds@main/widget-style.css">
 <div id="discussion-widget" class="widget-container">
-    <div class="widget-header">
-        <h3>Student Discussion Comments</h3>
-        <div class="widget-controls">
-            <button id="pauseBtn" class="control-btn" title="Pause/Resume">
-                <span id="pauseIcon">⏸</span>
-            </button>
-            <button id="prevBtn" class="control-btn" title="Previous Comment">⏮</button>
-            <button id="nextBtn" class="control-btn" title="Next Comment">⏭</button>
-        </div>
-    </div>
-    <div class="comment-display">
+    <div class="comment-bubble">
         <div id="commentContent" class="comment-content">
             <div class="loading">Loading comments...</div>
         </div>
@@ -72,14 +62,14 @@ window.discussionWidgetConfig = {
             <span id="authorName" class="author-name"></span>
             <span id="commentDate" class="comment-date"></span>
         </div>
-        <div class="progress-indicator">
-            <span id="currentIndex">0</span> / <span id="totalComments">0</span>
-        </div>
     </div>
-    <div class="widget-footer">
-        <label for="cycleInterval">Cycle Interval (seconds):</label>
-        <input type="number" id="cycleInterval" min="5" max="60" value="15">
-    </div>
+    <!-- Hidden elements for compatibility -->
+    <span id="currentIndex" style="display:none;">0</span>
+    <span id="totalComments" style="display:none;">0</span>
+    <button id="pauseBtn" style="display:none;"></button>
+    <button id="prevBtn" style="display:none;"></button>
+    <button id="nextBtn" style="display:none;"></button>
+    <input type="number" id="cycleInterval" style="display:none;" value="15">
 </div>
 <script src="https://cdn.jsdelivr.net/gh/Quinna-create/discussion-comment-feeds@main/widget-script.js"></script>
 ```
