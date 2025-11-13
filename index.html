@@ -18,13 +18,21 @@
         <div style="background: #f0f7ff; border-left: 4px solid #007bff; padding: 20px; margin-bottom: 30px; border-radius: 4px;">
             <h2 style="color: #0056b3; margin-top: 0; font-size: 1.3rem;">🚀 Getting Started</h2>
             <p style="color: #333; margin-bottom: 15px;">
-                This widget fetches and displays comments from Canvas LMS discussion boards. 
-                Below is a demo using mock data. To connect to your Canvas course:
+                This widget fetches comments from a <strong>Replit backend server</strong> that securely connects to Canvas LMS. 
+                The backend handles Canvas API authentication so your tokens stay safe.
+            </p>
+            <div style="background: #fff3cd; border: 1px solid #ffc107; padding: 15px; margin: 15px 0; border-radius: 4px;">
+                <strong>⚠️ Important:</strong> You need to set up a Replit backend server first. 
+                See <a href="REPLIT_BACKEND.md" style="color: #007bff;">REPLIT_BACKEND.md</a> for setup instructions.
+            </div>
+            <p style="color: #333; margin-bottom: 15px;">
+                <strong>Quick Setup Steps:</strong>
             </p>
             <ol style="color: #333; line-height: 1.8; padding-left: 20px;">
-                <li>Get your Canvas API token from Account → Settings → New Access Token</li>
-                <li>Find your Course ID and Discussion ID from Canvas URLs</li>
-                <li>Configure the widget (see <a href="README.md" style="color: #007bff;">README.md</a> for details)</li>
+                <li>Set up Replit backend (see <a href="REPLIT_BACKEND.md" style="color: #007bff;">REPLIT_BACKEND.md</a>)</li>
+                <li>Get your Replit URL from the running server</li>
+                <li>Update the <code>replitApiUrl</code> in the widget configuration below</li>
+                <li>Open this page - comments will load automatically!</li>
             </ol>
         </div>
 
@@ -64,20 +72,24 @@
             <h2 style="font-size: 1.3rem; margin-bottom: 15px; color: #333;">📖 Documentation</h2>
             <ul style="list-style: none; padding: 0;">
                 <li style="margin-bottom: 10px;">
+                    <a href="REPLIT_BACKEND.md" style="color: #007bff; text-decoration: none; font-weight: 500;">→ Replit Backend Setup</a> - 
+                    <span style="color: #666;"><strong>Start here!</strong> How to set up the secure backend server</span>
+                </li>
+                <li style="margin-bottom: 10px;">
                     <a href="demo.html" style="color: #007bff; text-decoration: none; font-weight: 500;">→ Full Demo</a> - 
-                    <span style="color: #666;">See the widget in action with sample data</span>
+                    <span style="color: #666;">See the widget in action</span>
                 </li>
                 <li style="margin-bottom: 10px;">
                     <a href="discussion-widget.html" style="color: #007bff; text-decoration: none; font-weight: 500;">→ Embeddable Widget</a> - 
                     <span style="color: #666;">Standalone version for iframe embedding</span>
                 </li>
                 <li style="margin-bottom: 10px;">
-                    <a href="QUICKSTART.md" style="color: #007bff; text-decoration: none; font-weight: 500;">→ Quick Start Guide</a> - 
-                    <span style="color: #666;">5-minute setup for Canvas integration</span>
+                    <a href="README.md" style="color: #007bff; text-decoration: none; font-weight: 500;">→ Full Documentation</a> - 
+                    <span style="color: #666;">Complete usage guide and API reference</span>
                 </li>
                 <li style="margin-bottom: 10px;">
-                    <a href="CANVAS_INTEGRATION.md" style="color: #007bff; text-decoration: none; font-weight: 500;">→ Canvas Integration Guide</a> - 
-                    <span style="color: #666;">Detailed Canvas LMS setup instructions</span>
+                    <a href="QUICKSTART.md" style="color: #007bff; text-decoration: none; font-weight: 500;">→ Quick Start Guide</a> - 
+                    <span style="color: #666;">5-minute setup for Canvas integration</span>
                 </li>
             </ul>
         </div>

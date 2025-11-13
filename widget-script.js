@@ -329,7 +329,19 @@ class DiscussionWidget {
     }
 
     showError(message) {
-        this.elements.commentContent.innerHTML = `<div class="error">${message}</div>`;
+        this.elements.commentContent.innerHTML = `
+            <div class="error" style="color: #721c24; background: #f8d7da; border: 1px solid #f5c6cb; padding: 15px; border-radius: 4px; margin: 10px 0;">
+                <strong>Error:</strong> ${message}
+                <br><br>
+                <small style="color: #666;">
+                    <strong>Troubleshooting:</strong><br>
+                    • Ensure the Replit backend server is running<br>
+                    • Check that the API URL is correct<br>
+                    • Verify CORS is enabled on the backend<br>
+                    • Try using mock data for testing (set mockData: true in config)
+                </small>
+            </div>
+        `;
     }
 }
 
