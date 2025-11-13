@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discussion Comment Feed Widget</title>
+    <link rel="stylesheet" href="widget-style.css">
+</head>
+<body>
+    <div id="discussion-widget" class="widget-container">
+        <div class="widget-header">
+            <h3>Student Discussion Comments</h3>
+            <div class="widget-controls">
+                <button id="pauseBtn" class="control-btn" title="Pause/Resume">
+                    <span id="pauseIcon">⏸</span>
+                </button>
+                <button id="prevBtn" class="control-btn" title="Previous Comment">⏮</button>
+                <button id="nextBtn" class="control-btn" title="Next Comment">⏭</button>
+            </div>
+        </div>
+        
+        <div class="comment-display">
+            <div id="commentContent" class="comment-content">
+                <div class="loading">Loading comments...</div>
+            </div>
+            <div class="comment-meta">
+                <span id="authorName" class="author-name"></span>
+                <span id="commentDate" class="comment-date"></span>
+            </div>
+            <div class="progress-indicator">
+                <span id="currentIndex">0</span> / <span id="totalComments">0</span>
+            </div>
+        </div>
+        
+        <div class="widget-footer">
+            <label for="cycleInterval">Cycle Interval (seconds):</label>
+            <input type="number" id="cycleInterval" min="5" max="60" value="15">
+        </div>
+    </div>
+
+    <script src="widget-script.js"></script>
+</body>
+</html>

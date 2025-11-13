@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discussion Widget - Canvas Configuration</title>
+    <link rel="stylesheet" href="widget-style.css">
+</head>
+<body>
+    <!-- 
+        CONFIGURATION EXAMPLE
+        
+        Replace the values in the script below with your Canvas credentials:
+        
+        1. canvasUrl: Your Canvas instance URL (e.g., 'https://canvas.instructure.com')
+        2. accessToken: Your Canvas API access token (from Account Settings)
+        3. courseId: The ID of your course (from Canvas URL)
+        4. discussionId: The ID of the discussion board (from discussion URL)
+        5. cycleInterval: Time in milliseconds between comments (default: 15000)
+        6. maxComments: Maximum number of comments to display (default: 50)
+    -->
+
+    <script>
+    window.discussionWidgetConfig = {
+        // Canvas Configuration
+        canvasUrl: 'https://your-institution.instructure.com',
+        accessToken: 'YOUR_ACCESS_TOKEN_HERE',
+        courseId: 'YOUR_COURSE_ID',
+        discussionId: 'YOUR_DISCUSSION_ID',
+        
+        // Widget Settings
+        cycleInterval: 15000,  // 15 seconds
+        maxComments: 50,
+        
+        // Set to true to use mock data for testing
+        mockData: false
+    };
+    </script>
+
+    <!-- Widget HTML -->
+    <div id="discussion-widget" class="widget-container">
+        <div class="widget-header">
+            <h3>Student Discussion Comments</h3>
+            <div class="widget-controls">
+                <button id="pauseBtn" class="control-btn" title="Pause/Resume">
+                    <span id="pauseIcon">⏸</span>
+                </button>
+                <button id="prevBtn" class="control-btn" title="Previous Comment">⏮</button>
+                <button id="nextBtn" class="control-btn" title="Next Comment">⏭</button>
+            </div>
+        </div>
+        
+        <div class="comment-display">
+            <div id="commentContent" class="comment-content">
+                <div class="loading">Loading comments...</div>
+            </div>
+            <div class="comment-meta">
+                <span id="authorName" class="author-name"></span>
+                <span id="commentDate" class="comment-date"></span>
+            </div>
+            <div class="progress-indicator">
+                <span id="currentIndex">0</span> / <span id="totalComments">0</span>
+            </div>
+        </div>
+        
+        <div class="widget-footer">
+            <label for="cycleInterval">Cycle Interval (seconds):</label>
+            <input type="number" id="cycleInterval" min="5" max="60" value="15">
+        </div>
+    </div>
+
+    <script src="widget-script.js"></script>
+</body>
+</html>
