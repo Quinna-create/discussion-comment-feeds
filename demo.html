@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discussion Feed Widget - Demo with Mock Data</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .video-section {
+            padding: 20px;
+            background: #000;
+        }
+
+        .video-placeholder {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #1a1a1a;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 18px;
+        }
+
+        .video-placeholder video {
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+        }
+
+        .discussion-feed {
+            padding: 20px;
+            background: #ffffff;
+            border-left: 1px solid #e0e0e0;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .feed-header {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .refresh-btn {
+            background: #0066cc;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.2s;
+        }
+
+        .refresh-btn:hover {
+            background: #0052a3;
+        }
+
+        .post {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            border-left: 3px solid #0066cc;
+            animation: slideIn 0.3s ease-out;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .post:hover {
+            transform: translateX(5px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .post.active {
+            background: #e3f2fd;
+            border-left-color: #1976d2;
+            box-shadow: 0 2px 12px rgba(25, 118, 210, 0.2);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .post-author {
+            font-weight: 600;
+            color: #0066cc;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .post-content {
+            color: #333;
+            line-height: 1.5;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .post-meta {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .demo-notice {
+            padding: 15px;
+            background: #e7f3ff;
+            border: 1px solid #b3d9ff;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            color: #004085;
+        }
+
+        .demo-notice strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .demo-controls {
+            padding: 15px;
+            background: #f0f0f0;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .demo-controls label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .demo-controls input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .discussion-feed {
+                border-left: none;
+                border-top: 1px solid #e0e0e0;
+                max-height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="video-section">
+            <div class="video-placeholder">
+                <video id="videoPlayer" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </div>
+
+        <div class="discussion-feed">
+            <div class="feed-header">
+                <span>Discussion Feed</span>
+                <button class="refresh-btn" onclick="addMockPost()">+ Add Post</button>
+            </div>
+
+            <div class="demo-notice">
+                <strong>🎭 Demo Mode</strong>
+                This is a demonstration with mock data. Click "Play" on the video to see posts cycle automatically!
+            </div>
+
+            <div class="demo-controls">
+                <label>Cycle Interval (seconds):</label>
+                <input type="number" id="cycleInterval" value="3" min="1" max="10" onchange="updateInterval()" />
+            </div>
+
+            <div id="postsContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        // Mock data for demonstration
+        const mockPosts = [
+            {
+                author: "Sarah Johnson",
+                content: "This lecture really clarified the concept of recursion for me. The visual examples were especially helpful!",
+                timestamp: new Date(Date.now() - 5 * 60000).toISOString()
+            },
+            {
+                author: "Michael Chen",
+                content: "Could someone explain the difference between depth-first and breadth-first search again? I'm still a bit confused.",
+                timestamp: new Date(Date.now() - 15 * 60000).toISOString()
+            },
+            {
+                author: "Emma Rodriguez",
+                content: "The time complexity analysis at minute 12:30 is brilliant! Now I understand Big O notation much better.",
+                timestamp: new Date(Date.now() - 30 * 60000).toISOString()
+            },
+            {
+                author: "David Park",
+                content: "Has anyone tried implementing the binary search algorithm from the lecture? I got it working after a few tries!",
+                timestamp: new Date(Date.now() - 45 * 60000).toISOString()
+            },
+            {
+                author: "Lisa Anderson",
+                content: "Great explanation of linked lists vs arrays. The memory diagram really helped visualize the differences.",
+                timestamp: new Date(Date.now() - 60 * 60000).toISOString()
+            }
+        ];
+
+        let posts = [...mockPosts];
+        let currentIndex = 0;
+        let cycleTimer = null;
+        let cycleInterval = 3000; // 3 seconds default for demo
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            displayPosts();
+            setupVideoCycling();
+        });
+
+        function displayPosts() {
+            const container = document.getElementById('postsContainer');
+            container.innerHTML = '';
+
+            posts.forEach((post, index) => {
+                const postElement = document.createElement('div');
+                postElement.className = 'post';
+                postElement.id = `post-${index}`;
+                
+                postElement.innerHTML = `
+                    <div class="post-author">${escapeHtml(post.author)}</div>
+                    <div class="post-content">${escapeHtml(post.content)}</div>
+                    <div class="post-meta">${escapeHtml(formatTimestamp(post.timestamp))}</div>
+                `;
+                
+                container.appendChild(postElement);
+            });
+
+            // Highlight first post
+            if (posts.length > 0) {
+                highlightPost(0);
+            }
+        }
+
+        function highlightPost(index) {
+            // Remove active class from all posts
+            document.querySelectorAll('.post').forEach(post => {
+                post.classList.remove('active');
+            });
+
+            // Add active class to current post
+            const currentPost = document.getElementById(`post-${index}`);
+            if (currentPost) {
+                currentPost.classList.add('active');
+                currentPost.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        function setupVideoCycling() {
+            const video = document.getElementById('videoPlayer');
+            
+            // Start cycling when video plays
+            video.addEventListener('play', function() {
+                startCycling();
+            });
+
+            // Stop cycling when video pauses
+            video.addEventListener('pause', function() {
+                stopCycling();
+            });
+
+            // Stop cycling when video ends
+            video.addEventListener('ended', function() {
+                stopCycling();
+            });
+        }
+
+        function startCycling() {
+            if (posts.length === 0) return;
+            
+            stopCycling(); // Clear any existing timer
+            
+            cycleTimer = setInterval(() => {
+                currentIndex = (currentIndex + 1) % posts.length;
+                highlightPost(currentIndex);
+            }, cycleInterval);
+        }
+
+        function stopCycling() {
+            if (cycleTimer) {
+                clearInterval(cycleTimer);
+                cycleTimer = null;
+            }
+        }
+
+        function updateInterval() {
+            const newInterval = parseInt(document.getElementById('cycleInterval').value);
+            if (newInterval >= 1 && newInterval <= 10) {
+                cycleInterval = newInterval * 1000;
+                // Restart cycling if video is playing
+                const video = document.getElementById('videoPlayer');
+                if (!video.paused) {
+                    startCycling();
+                }
+            }
+        }
+
+        function addMockPost() {
+            const newNames = ["Alex Kim", "Jordan Taylor", "Casey Morgan", "Riley Smith", "Quinn Davis"];
+            const newComments = [
+                "Just had an 'aha!' moment watching this. Thank you!",
+                "This is exactly what I needed to prepare for the exam.",
+                "Could we get more examples like this in future lectures?",
+                "The way you explained this topic is so clear and concise.",
+                "I'm sharing this with my study group. Excellent content!"
+            ];
+            
+            const randomName = newNames[Math.floor(Math.random() * newNames.length)];
+            const randomComment = newComments[Math.floor(Math.random() * newComments.length)];
+            
+            posts.unshift({
+                author: randomName,
+                content: randomComment,
+                timestamp: new Date().toISOString()
+            });
+            
+            displayPosts();
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function formatTimestamp(timestamp) {
+            if (!timestamp) return 'Recently';
+            
+            try {
+                const date = new Date(timestamp);
+                if (isNaN(date.getTime())) return timestamp;
+                
+                const now = new Date();
+                const diffMs = now - date;
+                const diffMins = Math.floor(diffMs / 60000);
+                const diffHours = Math.floor(diffMs / 3600000);
+                const diffDays = Math.floor(diffMs / 86400000);
+                
+                if (diffMins < 1) return 'Just now';
+                if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
+                if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+                if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+                
+                return date.toLocaleDateString();
+            } catch (e) {
+                return timestamp;
+            }
+        }
+    </script>
+</body>
+</html>
