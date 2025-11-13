@@ -125,14 +125,23 @@ class DiscussionWidget {
     }
 
     async fetchFromReplitAPI() {
-        const { replitApiUrl, maxComments } = this.config;
+        const { replitApiUrl, courseId, discussionId, maxComments } = this.config;
 
         if (!replitApiUrl) {
             throw new Error('Replit API URL not configured');
         }
 
+        if (!courseId || !discussionId) {
+            throw new Error('courseId and discussionId are required when using Replit API');
+        }
+
         try {
-            const response = await fetch(replitApiUrl, {
+            // Build URL with query parameters
+            const url = new URL(replitApiUrl);
+            url.searchParams.append('courseId', courseId);
+            url.searchParams.append('discussionId', discussionId);
+
+            const response = await fetch(url.toString(), {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'

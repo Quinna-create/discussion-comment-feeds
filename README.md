@@ -149,8 +149,8 @@ For more advanced integration, you can create a Canvas LTI (Learning Tools Inter
 | `replitApiUrl` | string | '' | **Recommended**: Replit backend API URL (secure proxy to Canvas) |
 | `canvasUrl` | string | '' | Your Canvas instance URL (e.g., 'https://canvas.instructure.com') - for direct access |
 | `accessToken` | string | '' | Canvas API access token - for direct access (not recommended) |
-| `courseId` | string | '' | Canvas course ID - for direct access |
-| `discussionId` | string | '' | Discussion topic ID - for direct access |
+| `courseId` | string | '' | **Required** for both Replit API and direct Canvas access |
+| `discussionId` | string | '' | **Required** for both Replit API and direct Canvas access |
 | `cycleInterval` | number | 15000 | Time between comments in milliseconds |
 | `maxComments` | number | 50 | Maximum number of comments to load |
 | `mockData` | boolean | false | Use mock data instead of API (for offline testing) |
@@ -191,6 +191,8 @@ discussion-comment-feeds/
     // Fetch comments from Replit backend (secure - no exposed tokens)
     window.discussionWidgetConfig = {
         replitApiUrl: 'https://c76efa4a-f1cb-493a-bbce-a2170f4456b4-00-2qw4tixq4jmr9.kirk.replit.dev',
+        courseId: '196700',      // Required: Canvas course ID
+        discussionId: '6735506', // Required: Discussion topic ID
         cycleInterval: 15000, // 15 seconds
         maxComments: 50
     };
@@ -331,6 +333,8 @@ Once your Replit backend is running, update the widget configuration:
 ```javascript
 window.discussionWidgetConfig = {
     replitApiUrl: 'YOUR_REPLIT_URL_HERE',  // e.g., 'https://your-project.username.repl.co'
+    courseId: 'YOUR_COURSE_ID',            // Required: Canvas course ID
+    discussionId: 'YOUR_DISCUSSION_ID',    // Required: Discussion topic ID
     cycleInterval: 15000,
     maxComments: 50
 };
