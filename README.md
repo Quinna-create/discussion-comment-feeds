@@ -189,7 +189,7 @@ discussion-comment-feeds/
     <script>
     // Fetch comments from Replit backend (secure - no exposed tokens)
     window.discussionWidgetConfig = {
-        replitApiUrl: 'https://canvas-discussion-widget.quinna2.replit.app',
+        replitApiUrl: 'https://canvas-discuss-quinna2.replit.app',
         courseId: '196700',      // Required: Canvas course ID
         discussionId: '6735506', // Required: Discussion topic ID
         cycleInterval: 15000, // 15 seconds
