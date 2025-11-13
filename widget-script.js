@@ -13,7 +13,8 @@ class DiscussionWidget {
             discussionId: config.discussionId || '',
             cycleInterval: config.cycleInterval || 15000, // milliseconds
             maxComments: config.maxComments || 50,
-            mockData: config.mockData || false // For testing without Canvas API
+            mockData: config.mockData || false, // For testing without Canvas API
+            replitApiUrl: config.replitApiUrl || '' // Replit proxy API URL (alternative to direct Canvas access)
         };
 
         // State
@@ -75,8 +76,11 @@ class DiscussionWidget {
             if (this.config.mockData) {
                 // Load mock data for testing
                 this.comments = this.generateMockComments();
+            } else if (this.config.replitApiUrl) {
+                // Load from Replit proxy API (preferred method)
+                this.comments = await this.fetchFromReplitAPI();
             } else {
-                // Load from Canvas API
+                // Fallback: Load directly from Canvas API
                 this.comments = await this.fetchCanvasComments();
             }
             
@@ -118,6 +122,59 @@ class DiscussionWidget {
         
         // Limit number of comments
         return allComments.slice(0, maxComments);
+    }
+
+    async fetchFromReplitAPI() {
+        const { replitApiUrl, maxComments } = this.config;
+
+        if (!replitApiUrl) {
+            throw new Error('Replit API URL not configured');
+        }
+
+        try {
+            const response = await fetch(replitApiUrl, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`Replit API error: ${response.status}`);
+            }
+
+            const data = await response.json();
+            
+            // Handle different response formats from Replit API
+            let comments = [];
+            
+            if (Array.isArray(data)) {
+                comments = data;
+            } else if (data.comments && Array.isArray(data.comments)) {
+                comments = data.comments;
+            } else if (data.data && Array.isArray(data.data)) {
+                comments = data.data;
+            } else {
+                throw new Error('Unexpected API response format');
+            }
+
+            // Normalize comment format
+            const normalizedComments = comments.map(comment => ({
+                message: comment.text || comment.message || comment.comment || '',
+                author: comment.author || comment.username || comment.user_name || 'Anonymous',
+                created_at: comment.timestamp || comment.created_at || new Date().toISOString(),
+                id: comment.id || Math.random().toString(36)
+            }));
+
+            // Sort by creation date (oldest first for chronological order)
+            normalizedComments.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+            
+            // Limit number of comments
+            return normalizedComments.slice(0, maxComments);
+        } catch (error) {
+            console.error('Error fetching from Replit API:', error);
+            throw new Error(`Failed to fetch from Replit API: ${error.message}`);
+        }
     }
 
     flattenComments(entries, parentAuthor = null) {

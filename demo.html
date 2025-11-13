@@ -64,21 +64,18 @@
 
     <!-- Configuration Script -->
     <script>
-    // Demo configuration with mock data
+    // Configuration: Fetch comments from Replit backend (which connects to Canvas)
     window.discussionWidgetConfig = {
-        mockData: true,        // Use sample data for demo
-        cycleInterval: 10000   // 10 seconds between comments
+        replitApiUrl: 'https://c76efa4a-f1cb-493a-bbce-a2170f4456b4-00-2qw4tixq4jmr9.kirk.replit.dev',
+        cycleInterval: 10000,   // 10 seconds between comments
+        maxComments: 50
     };
     
-    // To use with real Canvas data, replace above with:
+    // Alternative: Use mock data for offline demo
     /*
     window.discussionWidgetConfig = {
-        canvasUrl: 'https://your-institution.instructure.com',
-        accessToken: 'YOUR_ACCESS_TOKEN',
-        courseId: 'YOUR_COURSE_ID',
-        discussionId: 'YOUR_DISCUSSION_ID',
-        cycleInterval: 15000,
-        maxComments: 50
+        mockData: true,
+        cycleInterval: 10000
     };
     */
     </script>

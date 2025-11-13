@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Comment Posting Widget</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Simple Comment Posting Widget</h1>
+            <p>A standalone platform for posting and viewing comments (not connected to Canvas)</p>
+            <div style="background: #fff3cd; border: 1px solid #ffc107; padding: 15px; margin-top: 15px; border-radius: 4px;">
+                <strong>Note:</strong> This is a LOCAL posting widget that stores comments in your browser's localStorage. 
+                It does NOT connect to Canvas LMS. For Canvas integration, see 
+                <a href="index.html" style="color: #007bff;">index.html</a> or 
+                <a href="discussion-widget.html" style="color: #007bff;">discussion-widget.html</a>.
+            </div>
+        </header>
+        
+        <main>
+            <section class="create-comment">
+                <h2>Add a Comment</h2>
+                <form id="commentForm">
+                    <input type="text" id="username" placeholder="Your name" required>
+                    <textarea id="commentText" placeholder="Write your comment..." required></textarea>
+                    <button type="submit">Post Comment</button>
+                </form>
+            </section>
+            
+            <section class="comments-feed">
+                <h2>Comments Feed</h2>
+                <div id="commentsList"></div>
+            </section>
+        </main>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

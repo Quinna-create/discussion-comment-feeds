@@ -8,18 +8,42 @@ A customizable widget for Canvas LMS that displays cycling student discussion co
 - ⏯️ **Playback controls** - Pause, play, and navigate through comments manually
 - ⚙️ **Configurable timing** - Adjust cycle interval (5-60 seconds)
 - 🎨 **Clean, modern UI** - Responsive design that integrates seamlessly with Canvas
-- 🔒 **Secure** - Uses Canvas API with token authentication
+- 🔒 **Secure** - Connects to Canvas via Replit backend proxy (no exposed API tokens)
 - 📱 **Responsive** - Works on desktop, tablet, and mobile devices
+
+## Architecture
+
+This widget uses a **secure proxy architecture**:
+1. **Replit Backend** - Handles Canvas API authentication securely on the server
+2. **Widget Frontend** - Fetches comments from Replit API (no Canvas tokens exposed in browser)
+3. **Canvas LMS** - Source of discussion comments
+
+This is more secure than embedding Canvas API tokens directly in the frontend code.
 
 ## Quick Start
 
-### Option 1: Mock Data (Testing)
+### Option 1: Use with Replit Backend (Recommended)
 
-1. Open `demo.html` in a web browser
-2. The widget will load with sample comments automatically
-3. Perfect for testing the UI and functionality
+1. Open `index.html` or `demo.html` in a web browser
+2. The widget fetches comments from the Replit backend server
+3. The Replit server connects to Canvas and returns formatted comments
+4. **No Canvas API token needed in the frontend!**
 
-### Option 2: Canvas Integration
+### Option 2: Mock Data (Offline Testing)
+
+1. Edit the configuration in your HTML file:
+```javascript
+window.discussionWidgetConfig = {
+    mockData: true,
+    cycleInterval: 10000
+};
+```
+
+2. Open the file in a web browser to see sample comments
+
+### Option 3: Direct Canvas API Access (Less Secure)
+
+Only use this if you can't use the Replit backend:
 
 1. **Get Canvas API Token**
    - Log into your Canvas account
@@ -122,13 +146,14 @@ For more advanced integration, you can create a Canvas LTI (Learning Tools Inter
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `canvasUrl` | string | '' | Your Canvas instance URL (e.g., 'https://canvas.instructure.com') |
-| `accessToken` | string | '' | Canvas API access token |
-| `courseId` | string | '' | Canvas course ID |
-| `discussionId` | string | '' | Discussion topic ID |
+| `replitApiUrl` | string | '' | **Recommended**: Replit backend API URL (secure proxy to Canvas) |
+| `canvasUrl` | string | '' | Your Canvas instance URL (e.g., 'https://canvas.instructure.com') - for direct access |
+| `accessToken` | string | '' | Canvas API access token - for direct access (not recommended) |
+| `courseId` | string | '' | Canvas course ID - for direct access |
+| `discussionId` | string | '' | Discussion topic ID - for direct access |
 | `cycleInterval` | number | 15000 | Time between comments in milliseconds |
 | `maxComments` | number | 50 | Maximum number of comments to load |
-| `mockData` | boolean | false | Use mock data instead of Canvas API (for testing) |
+| `mockData` | boolean | false | Use mock data instead of API (for offline testing) |
 
 ## File Structure
 
@@ -148,7 +173,34 @@ discussion-comment-feeds/
 
 ## Usage Examples
 
-### Basic Setup with Mock Data
+### Recommended: Replit Backend Integration (Secure)
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Discussion Widget</title>
+    <link rel="stylesheet" href="widget-style.css">
+</head>
+<body>
+    <div id="discussion-widget" class="widget-container">
+        <!-- Widget content from discussion-widget.html -->
+    </div>
+    
+    <script>
+    // Fetch comments from Replit backend (secure - no exposed tokens)
+    window.discussionWidgetConfig = {
+        replitApiUrl: 'https://c76efa4a-f1cb-493a-bbce-a2170f4456b4-00-2qw4tixq4jmr9.kirk.replit.dev',
+        cycleInterval: 15000, // 15 seconds
+        maxComments: 50
+    };
+    </script>
+    <script src="widget-script.js"></script>
+</body>
+</html>
+```
+
+### Mock Data (Offline Testing)
 
 ```html
 <!DOCTYPE html>
@@ -174,7 +226,7 @@ discussion-comment-feeds/
 </html>
 ```
 
-### Canvas API Integration
+### Direct Canvas API Integration (Not Recommended - Exposes Token)
 
 ```javascript
 window.discussionWidgetConfig = {
