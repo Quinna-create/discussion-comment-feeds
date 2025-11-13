@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discussion Comment Feeds</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Discussion Comment Feeds</h1>
+            <p>A simple platform for discussion comments</p>
+        </header>
+        
+        <main>
+            <section class="create-comment">
+                <h2>Add a Comment</h2>
+                <form id="commentForm">
+                    <input type="text" id="username" placeholder="Your name" required>
+                    <textarea id="commentText" placeholder="Write your comment..." required></textarea>
+                    <button type="submit">Post Comment</button>
+                </form>
+            </section>
+            
+            <section class="comments-feed">
+                <h2>Comments Feed</h2>
+                <div id="commentsList"></div>
+            </section>
+        </main>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
