@@ -46,7 +46,7 @@ Created a comprehensive troubleshooting guide with:
 2. **Click "Run"**: This starts the backend server
 3. **Verify it's working**: Open this URL in your browser:
    ```
-   https://c76efa4a-f1cb-493a-bbce-a2170f4456b4-00-2qw4tixq4jmr9.kirk.replit.dev?courseId=196700&discussionId=6735506
+   https://canvas-discuss-quinna2.replit.app?courseId=196700&discussionId=6735506
    ```
    You should see JSON data with comments
 4. **Refresh your widget page**: The warning will disappear and real comments will display
@@ -95,7 +95,7 @@ If the backend is running but still showing demo data, check:
 Run this command to test if your backend is accessible:
 
 ```bash
-curl "https://c76efa4a-f1cb-493a-bbce-a2170f4456b4-00-2qw4tixq4jmr9.kirk.replit.dev?courseId=196700&discussionId=6735506"
+curl "https://canvas-discuss-quinna2.replit.app?courseId=196700&discussionId=6735506"
 ```
 
 **Expected**: JSON array with comments  

@@ -16,7 +16,7 @@ Click the big green **"Run"** button to start the server
 ### Step 4: Verify It Works
 Open this URL in a new tab:
 ```
-https://c76efa4a-f1cb-493a-bbce-a2170f4456b4-00-2qw4tixq4jmr9.kirk.replit.dev/?courseId=196700&discussionId=6735506
+https://canvas-discuss-quinna2.replit.app/?courseId=196700&discussionId=6735506
 ```
 
 **You should see:** JSON data with Canvas comments  
