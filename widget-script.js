@@ -131,15 +131,17 @@ class DiscussionWidget {
             throw new Error('Replit API URL not configured');
         }
 
-        try {
-            // Build URL with query parameters if courseId and discussionId are provided
-            let url = replitApiUrl;
-            if (courseId && discussionId) {
-                const separator = url.includes('?') ? '&' : '?';
-                url += `${separator}courseId=${encodeURIComponent(courseId)}&discussionId=${encodeURIComponent(discussionId)}`;
-            }
+        if (!courseId || !discussionId) {
+            throw new Error('courseId and discussionId are required when using Replit API');
+        }
 
-            const response = await fetch(url, {
+        try {
+            // Build URL with query parameters
+            const url = new URL(replitApiUrl);
+            url.searchParams.append('courseId', courseId);
+            url.searchParams.append('discussionId', discussionId);
+
+            const response = await fetch(url.toString(), {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
