@@ -147,9 +147,17 @@ class DiscussionWidget {
 
         try {
             // Build URL with query parameters
-            const url = new URL(replitApiUrl);
+            // Support both root endpoint and /api/discussions endpoint
+            let apiUrl = replitApiUrl;
+            if (!apiUrl.includes('/api/discussions')) {
+                // If the URL doesn't already include /api/discussions, check if we should add it
+                // Try with /api/discussions first (new Canvas API format)
+                apiUrl = apiUrl.replace(/\/$/, '') + '/api/discussions';
+            }
+            
+            const url = new URL(apiUrl);
             url.searchParams.append('courseId', courseId);
-            url.searchParams.append('discussionId', discussionId);
+            url.searchParams.append('topicId', discussionId);
 
             console.log('Fetching from URL:', url.toString());
 
@@ -171,7 +179,10 @@ class DiscussionWidget {
             // Handle different response formats from Replit API
             let comments = [];
             
-            if (Array.isArray(data)) {
+            // Canvas API format with 'view' array (new format from Replit)
+            if (data.view && Array.isArray(data.view)) {
+                comments = data.view;
+            } else if (Array.isArray(data)) {
                 comments = data;
             } else if (data.comments && Array.isArray(data.comments)) {
                 comments = data.comments;
@@ -180,14 +191,18 @@ class DiscussionWidget {
             } else if (data.error) {
                 throw new Error(`Backend error: ${data.error}`);
             } else {
-                throw new Error('Unexpected API response format. Expected an array or object with comments/data property.');
+                throw new Error('Unexpected API response format. Expected an array or object with view/comments/data property.');
             }
 
-            // Normalize comment format
+            // Normalize comment format - handle Canvas API format
             const normalizedComments = comments.map(comment => ({
-                message: comment.text || comment.message || comment.comment || '',
-                author: comment.author || comment.username || comment.user_name || 'Anonymous',
-                created_at: comment.timestamp || comment.created_at || new Date().toISOString(),
+                message: comment.message || comment.text || comment.comment || '',
+                author: (comment.user && (comment.user.display_name || comment.user.name)) || 
+                        comment.author || 
+                        comment.username || 
+                        comment.user_name || 
+                        'Anonymous',
+                created_at: comment.created_at || comment.timestamp || new Date().toISOString(),
                 id: comment.id || Math.random().toString(36)
             }));
 

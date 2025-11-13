@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discussion Widget Embed Example</title>
+  <link rel="stylesheet" href="widget-style.css">
+</head>
+<body>
+  <h1>Canvas Discussion Widget - Embed Example</h1>
+  <p>This is an example of how to embed the Canvas discussion widget using the Replit API format.</p>
+  
+  <div id="canvas-discussion-widget"></div>
+  
+  <script>
+    // IMPORTANT: Replace with your deployed Replit API URL
+    const API_URL = 'https://canvas-discuss-quinna2.replit.app/api/discussions';
+    
+    fetch(`${API_URL}?courseId=196700&topicId=6735506`)
+      .then(response => response.json())
+      .then(data => {
+        const container = document.getElementById('canvas-discussion-widget');
+        
+        // Canvas API returns posts in 'view' array
+        const posts = data.view || [];
+        
+        if (posts.length === 0) {
+          container.innerHTML = '<p style="color: #6b7280;">No posts yet.</p>';
+          return;
+        }
+        
+        // Render posts
+        container.innerHTML = posts.map(post => `
+          <div style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; margin-bottom: 12px;">
+            <div style="display: flex; gap: 12px;">
+              <img src="${post.user.avatar_image_url || 'https://via.placeholder.com/32'}" 
+                   alt="${post.user.display_name}" 
+                   style="width: 32px; height: 32px; border-radius: 50%;">
+              <div style="flex: 1;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                  <strong>${post.user.display_name}</strong>
+                  <small style="color: #6b7280;">${new Date(post.created_at).toLocaleDateString()}</small>
+                </div>
+                <div>${post.message}</div>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      })
+      .catch(error => {
+        console.error('Error loading discussion:', error);
+        document.getElementById('canvas-discussion-widget').innerHTML = 
+          '<p style="color: #ef4444;">Failed to load discussion posts.</p>';
+      });
+  </script>
+</body>
+</html>
