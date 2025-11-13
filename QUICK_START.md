@@ -6,7 +6,7 @@ Get your Discussion Feed Widget running in 5 minutes!
 
 1. **Download** `demo.html` from this repository
 2. **Open** it in your web browser
-3. **Click Play** on the video to see posts cycle automatically
+3. **Watch** as student comments cycle automatically in a clean bubble design
 
 That's it! No server needed, no configuration required.
 
@@ -48,10 +48,10 @@ let apiUrl = 'YOUR_REPLIT_API_URL';
 
 ## 🎯 What You Get
 
-- ✅ Video lectures with real-time discussion feed
-- ✅ Posts automatically cycle as video plays
+- ✅ Clean bubble design with auto-cycling comments
+- ✅ Smooth transitions with pulsing border animations
 - ✅ Students see what classmates are saying
-- ✅ Encourages engagement during lectures
+- ✅ Encourages engagement with course content
 - ✅ Works on desktop and mobile
 - ✅ No server maintenance required
 

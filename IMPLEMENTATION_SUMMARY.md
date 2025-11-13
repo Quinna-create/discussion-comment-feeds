@@ -48,10 +48,11 @@ The widget now shows helpful error messages with troubleshooting steps when:
 
 ### 6. **Tested Successfully** ✅
 Widget tested with mock data and working perfectly:
-- Comments cycle automatically
-- Controls work (pause, previous, next)
+- Comments cycle automatically in clean bubble design
+- Smooth transitions with pulsing border animations
 - Author names and timestamps display correctly
 - Responsive design looks good
+- Dynamic sizing based on content
 
 ## Current Configuration
 
@@ -85,7 +86,7 @@ If you need to create a backend:
 To verify the widget works:
 1. Open `test-mock.html` in a browser
 2. It will show sample comments cycling automatically
-3. Test all controls (pause, navigation, interval adjustment)
+3. Watch the smooth bubble animations and transitions
 
 ## Files Modified
 

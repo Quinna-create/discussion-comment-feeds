@@ -5,9 +5,8 @@ A customizable widget for Canvas LMS that displays cycling student discussion co
 ## Features
 
 - 🔄 **Auto-cycling comments** - Automatically rotates through discussion board comments
-- ⏯️ **Playback controls** - Pause, play, and navigate through comments manually
-- ⚙️ **Configurable timing** - Adjust cycle interval (5-60 seconds)
-- 🎨 **Clean, modern UI** - Responsive design that integrates seamlessly with Canvas
+- 💬 **Clean bubble design** - Modern, distraction-free interface with pulsing border animations
+- 🎨 **Dynamic sizing** - Bubble adapts to content length (approximately 600x200 pixels)
 - 🔒 **Secure** - Connects to Canvas via Replit backend proxy (no exposed API tokens)
 - 📱 **Responsive** - Works on desktop, tablet, and mobile devices
 
