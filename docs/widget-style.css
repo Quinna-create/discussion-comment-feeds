@@ -135,6 +135,119 @@ body {
     font-weight: 600;
 }
 
+/* Extended widget styles for index.html layout */
+.widget-header {
+    background: linear-gradient(135deg, #9b8b9e 0%, #7a9b9e 50%, #b89d9d 100%);
+    color: #2a2a2a;
+    padding: 1rem 1.5rem;
+    text-align: center;
+    box-shadow: 0 3px 0 #5a4a54, 0 6px 10px rgba(0, 0, 0, 0.2);
+    border-bottom: 4px solid #5a4a54;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.widget-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.3);
+    font-family: 'Courier New', monospace;
+}
+
+.widget-controls {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.control-btn {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border: 3px solid #5a4a54;
+    background-color: #d4c4b0;
+    color: #2a2a2a;
+    border-radius: 0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 3px 3px 0px #8b7e74;
+    font-family: 'Courier New', monospace;
+}
+
+.control-btn:hover {
+    background-color: #b89d9d;
+    transform: translate(1px, 1px);
+    box-shadow: 2px 2px 0px #8b7e74;
+}
+
+.control-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0px #8b7e74;
+}
+
+.comment-display {
+    background: linear-gradient(135deg, #d4b8c8 0%, #c8dde0 100%);
+    border-radius: 0;
+    padding: 30px;
+    position: relative;
+    border-left: 4px solid #5a4a54;
+    border-right: 4px solid #5a4a54;
+}
+
+.progress-indicator {
+    text-align: center;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 3px solid #8b7e74;
+    color: #2a2a2a;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.widget-footer {
+    background: #a89b9e;
+    padding: 1rem 1.5rem;
+    border-top: 4px solid #5a4a54;
+    box-shadow: 0 3px 0 #5a4a54;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.widget-footer label {
+    color: #2a2a2a;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+}
+
+.widget-footer input[type="number"] {
+    padding: 0.5rem 1rem;
+    border: 3px solid #5a4a54;
+    background-color: #faf8f4;
+    color: #2a2a2a;
+    border-radius: 0;
+    font-family: 'Courier New', monospace;
+    font-size: 1rem;
+    font-weight: 600;
+    width: 80px;
+    text-align: center;
+    box-shadow: 3px 3px 0px #8b7e74;
+}
+
+.widget-footer input[type="number"]:focus {
+    outline: none;
+    background-color: #ffffff;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 /* Responsive design */
 @media (max-width: 640px) {
     .widget-container {
@@ -149,5 +262,25 @@ body {
     
     .comment-content {
         font-size: 14px;
+    }
+
+    .widget-header {
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 1rem;
+    }
+
+    .widget-header h3 {
+        font-size: 1rem;
+    }
+
+    .control-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+    }
+
+    .widget-footer {
+        flex-direction: column;
+        gap: 0.5rem;
     }
 }
