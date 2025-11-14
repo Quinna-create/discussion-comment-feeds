@@ -1,4 +1,4 @@
-/* Discussion Comment Feed Widget Styles */
+/* Discussion Comment Feed Widget Styles - 80s JRPG Aesthetic */
 
 * {
     margin: 0;
@@ -7,8 +7,9 @@
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Courier New', 'Courier', monospace;
     background: transparent;
+    image-rendering: pixelated;
 }
 
 .widget-container {
@@ -21,12 +22,12 @@ body {
     justify-content: center;
 }
 
-/* Bubble Design */
+/* 80s JRPG Text Box Design */
 .comment-bubble {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 30px;
+    background: linear-gradient(135deg, #d4b8c8 0%, #c8dde0 100%);
+    border-radius: 0;
     padding: 30px;
-    box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+    box-shadow: 6px 6px 0px #7a9b9e;
     min-width: 400px;
     max-width: 600px;
     min-height: 180px;
@@ -34,30 +35,51 @@ body {
     flex-direction: column;
     justify-content: center;
     position: relative;
-    border: 3px solid rgba(255, 255, 255, 0.3);
-    transition: all 0.3s ease;
+    border: 4px solid #5a4a54;
+    transition: all 0.2s ease;
 }
 
-/* Pulsing border animation */
+/* Pixel art corner decorations */
+.comment-bubble::before,
+.comment-bubble::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: #5a4a54;
+}
+
+.comment-bubble::before {
+    top: -4px;
+    left: -4px;
+}
+
+.comment-bubble::after {
+    bottom: -4px;
+    right: -4px;
+}
+
+/* Pulsing border animation - JRPG style */
 @keyframes pulse {
     0%, 100% {
-        border-color: rgba(255, 255, 255, 0.3);
-        box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+        border-color: #5a4a54;
+        box-shadow: 6px 6px 0px #7a9b9e;
     }
     50% {
-        border-color: rgba(255, 255, 255, 0.8);
-        box-shadow: 0 8px 48px rgba(102, 126, 234, 0.5), 0 0 30px rgba(255, 255, 255, 0.3);
+        border-color: #8b7e74;
+        box-shadow: 8px 8px 0px #9b8b9e;
+        transform: translate(-1px, -1px);
     }
 }
 
 .comment-bubble.pulse-animation {
-    animation: pulse 2s ease-in-out;
+    animation: pulse 1.5s ease-in-out;
 }
 
 .comment-content {
-    font-size: 18px;
+    font-size: 16px;
     line-height: 1.6;
-    color: #ffffff;
+    color: #2a2a2a;
     margin-bottom: 20px;
     min-height: 80px;
     display: flex;
@@ -66,22 +88,28 @@ body {
     text-align: center;
     opacity: 1;
     transition: opacity 0.3s ease;
+    text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.5);
+    font-family: 'Courier New', monospace;
+    letter-spacing: 0.5px;
 }
 
 .loading {
     text-align: center;
-    color: rgba(255, 255, 255, 0.8);
-    font-style: italic;
+    color: #5a4a54;
+    font-style: normal;
     padding: 20px 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
 .error {
-    color: #ffebee;
+    color: #2a2a2a;
     padding: 20px;
     text-align: center;
-    background: rgba(211, 47, 47, 0.2);
-    border-radius: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: #d4b8b8;
+    border-radius: 0;
+    border: 3px solid #8b7e74;
+    box-shadow: 4px 4px 0px #9b8b9e;
 }
 
 .comment-meta {
@@ -89,19 +117,22 @@ body {
     justify-content: space-between;
     align-items: center;
     padding-top: 15px;
-    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    border-top: 3px solid #8b7e74;
 }
 
 .author-name {
-    font-weight: 600;
-    color: #ffffff;
+    font-weight: 700;
+    color: #2a2a2a;
     font-size: 14px;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .comment-date {
     font-size: 12px;
-    color: rgba(255, 255, 255, 0.8);
+    color: #5a4a54;
+    font-weight: 600;
 }
 
 /* Responsive design */
@@ -113,9 +144,10 @@ body {
     .comment-bubble {
         min-width: 300px;
         padding: 25px;
+        box-shadow: 4px 4px 0px #7a9b9e;
     }
     
     .comment-content {
-        font-size: 16px;
+        font-size: 14px;
     }
 }
