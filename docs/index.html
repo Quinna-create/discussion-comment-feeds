@@ -3,160 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discussion Comment Feeds Widget</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .container {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 600px;
-            padding: 40px;
-            text-align: center;
-        }
-
-        h1 {
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 32px;
-        }
-
-        p {
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 30px;
-            font-size: 16px;
-        }
-
-        .button {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 15px 30px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 16px;
-            transition: transform 0.2s, box-shadow 0.2s;
-            margin: 10px;
-        }
-
-        .button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
-        }
-
-        .button.secondary {
-            background: white;
-            color: #667eea;
-            border: 2px solid #667eea;
-        }
-
-        .button.secondary:hover {
-            background: #f8f9ff;
-        }
-
-        .links {
-            margin-top: 30px;
-            padding-top: 30px;
-            border-top: 1px solid #eee;
-        }
-
-        .links h2 {
-            color: #333;
-            font-size: 20px;
-            margin-bottom: 15px;
-        }
-
-        .links a {
-            display: block;
-            color: #667eea;
-            text-decoration: none;
-            margin: 8px 0;
-            font-size: 14px;
-        }
-
-        .links a:hover {
-            text-decoration: underline;
-        }
-
-        .features {
-            text-align: left;
-            margin: 30px 0;
-            padding: 20px;
-            background: #f8f9ff;
-            border-radius: 8px;
-        }
-
-        .features ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .features li {
-            padding: 8px 0;
-            color: #555;
-        }
-
-        .features li:before {
-            content: "✓ ";
-            color: #667eea;
-            font-weight: bold;
-            margin-right: 8px;
-        }
-    </style>
+    <title>Discussion Comment Feed Widget</title>
+    <link rel="stylesheet" href="widget-style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>📝 Discussion Comment Feeds Widget</h1>
-        <p>A customizable widget for Canvas LMS that displays cycling student discussion comments alongside video lectures.</p>
-        
-        <div class="features">
-            <ul>
-                <li>Auto-cycling comments from Canvas discussions</li>
-                <li>Clean bubble design without controls</li>
-                <li>Smooth transitions with pulsing border animation</li>
-                <li>Secure Canvas API integration</li>
-                <li>Responsive design for all devices</li>
+    <div style="max-width: 1000px; margin: 0 auto; padding: 20px;">
+        <header style="text-align: center; margin-bottom: 30px;">
+            <h1 style="color: #333; font-size: 2.5rem; margin-bottom: 10px;">Discussion Comment Feed Widget</h1>
+            <p style="color: #666; font-size: 1.1rem;">
+                Display student discussion comments from Canvas LMS alongside video lectures
+            </p>
+        </header>
+
+        <div style="background: #f0f7ff; border-left: 4px solid #007bff; padding: 20px; margin-bottom: 30px; border-radius: 4px;">
+            <h2 style="color: #0056b3; margin-top: 0; font-size: 1.3rem;">🚀 Getting Started</h2>
+            <p style="color: #333; margin-bottom: 15px;">
+                This widget fetches comments from a <strong>Replit backend server</strong> that securely connects to Canvas LMS. 
+                The backend handles Canvas API authentication so your tokens stay safe.
+            </p>
+            <div style="background: #fff3cd; border: 1px solid #ffc107; padding: 15px; margin: 15px 0; border-radius: 4px;">
+                <strong>⚠️ Important:</strong> You need to set up a Replit backend server first. 
+                See <a href="REPLIT_BACKEND.md" style="color: #007bff;">REPLIT_BACKEND.md</a> for setup instructions.
+            </div>
+            <p style="color: #333; margin-bottom: 15px;">
+                <strong>Quick Setup Steps:</strong>
+            </p>
+            <ol style="color: #333; line-height: 1.8; padding-left: 20px;">
+                <li>Set up Replit backend (see <a href="REPLIT_BACKEND.md" style="color: #007bff;">REPLIT_BACKEND.md</a>)</li>
+                <li>Get your Replit URL from the running server</li>
+                <li>Update the <code>replitApiUrl</code> in the widget configuration below</li>
+                <li>Open this page - comments will load automatically!</li>
+            </ol>
+        </div>
+
+        <!-- Widget Container -->
+        <div id="discussion-widget" class="widget-container">
+            <div class="widget-header">
+                <h3>Student Discussion Comments</h3>
+                <div class="widget-controls">
+                    <button id="pauseBtn" class="control-btn" title="Pause/Resume">
+                        <span id="pauseIcon">⏸</span>
+                    </button>
+                    <button id="prevBtn" class="control-btn" title="Previous Comment">⏮</button>
+                    <button id="nextBtn" class="control-btn" title="Next Comment">⏭</button>
+                </div>
+            </div>
+            
+            <div class="comment-display">
+                <div id="commentContent" class="comment-content">
+                    <div class="loading">Loading comments...</div>
+                </div>
+                <div class="comment-meta">
+                    <span id="authorName" class="author-name"></span>
+                    <span id="commentDate" class="comment-date"></span>
+                </div>
+                <div class="progress-indicator">
+                    <span id="currentIndex">0</span> / <span id="totalComments">0</span>
+                </div>
+            </div>
+            
+            <div class="widget-footer">
+                <label for="cycleInterval">Cycle Interval (seconds):</label>
+                <input type="number" id="cycleInterval" min="5" max="60" value="10">
+            </div>
+        </div>
+
+        <div style="margin-top: 30px; padding: 20px; background: #fff; border-radius: 8px; border: 1px solid #e0e0e0;">
+            <h2 style="font-size: 1.3rem; margin-bottom: 15px; color: #333;">📖 Documentation</h2>
+            <ul style="list-style: none; padding: 0;">
+                <li style="margin-bottom: 10px;">
+                    <a href="REPLIT_BACKEND.md" style="color: #007bff; text-decoration: none; font-weight: 500;">→ Replit Backend Setup</a> - 
+                    <span style="color: #666;"><strong>Start here!</strong> How to set up the secure backend server</span>
+                </li>
+                <li style="margin-bottom: 10px;">
+                    <a href="demo.html" style="color: #007bff; text-decoration: none; font-weight: 500;">→ Full Demo</a> - 
+                    <span style="color: #666;">See the widget in action</span>
+                </li>
+                <li style="margin-bottom: 10px;">
+                    <a href="discussion-widget.html" style="color: #007bff; text-decoration: none; font-weight: 500;">→ Embeddable Widget</a> - 
+                    <span style="color: #666;">Standalone version for iframe embedding</span>
+                </li>
+                <li style="margin-bottom: 10px;">
+                    <a href="README.md" style="color: #007bff; text-decoration: none; font-weight: 500;">→ Full Documentation</a> - 
+                    <span style="color: #666;">Complete usage guide and API reference</span>
+                </li>
+                <li style="margin-bottom: 10px;">
+                    <a href="QUICKSTART.md" style="color: #007bff; text-decoration: none; font-weight: 500;">→ Quick Start Guide</a> - 
+                    <span style="color: #666;">5-minute setup for Canvas integration</span>
+                </li>
             </ul>
         </div>
-
-        <div>
-            <a href="discussion-widget.html" class="button">View Widget Demo</a>
-            <a href="../README.md" class="button secondary">Documentation</a>
-        </div>
-
-        <div class="links">
-            <h2>Resources</h2>
-            <a href="api-reference.md">API Reference</a>
-            <a href="canvas-setup.md">Canvas Setup Guide</a>
-            <a href="https://github.com/Quinna-create/discussion-comment-feeds">GitHub Repository</a>
-        </div>
-
-        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; color: #999; font-size: 14px;">
-            <p>To embed in Canvas, use this iframe code:</p>
-            <code style="background: #f5f5f5; padding: 10px; display: block; margin-top: 10px; border-radius: 4px; font-size: 12px; text-align: left; overflow-x: auto;">
-                &lt;iframe src="YOUR_PAGES_URL/discussion-widget.html"<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;width="100%"<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;height="600px"<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;frameborder="0"&gt;&lt;/iframe&gt;
-            </code>
-        </div>
     </div>
+
+    <!-- Configuration Script for Demo -->
+    <script>
+    // Configuration to fetch comments from Replit backend (which connects to Canvas)
+    // The Replit server handles Canvas API authentication securely
+    window.discussionWidgetConfig = {
+        replitApiUrl: 'https://canvas-discuss-quinna2.replit.app',
+        courseId: '196700',
+        discussionId: '6735506',
+        cycleInterval: 10000,   // 10 seconds between comments
+        maxComments: 50
+    };
+    
+    // Alternative: Use mock data for offline testing
+    /*
+    window.discussionWidgetConfig = {
+        mockData: true,
+        cycleInterval: 10000
+    };
+    */
+    
+    // Alternative: Direct Canvas API access (requires exposing API token)
+    /*
+    window.discussionWidgetConfig = {
+        canvasUrl: 'https://your-institution.instructure.com',
+        accessToken: 'YOUR_CANVAS_API_TOKEN',
+        courseId: 'YOUR_COURSE_ID',
+        discussionId: 'YOUR_DISCUSSION_ID',
+        cycleInterval: 15000,
+        maxComments: 50
+    };
+    */
+    </script>
+    
+    <script src="widget-script.js"></script>
 </body>
 </html>
